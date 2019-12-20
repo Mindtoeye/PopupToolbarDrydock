@@ -1,0 +1,9 @@
+
+.toolbar {
+  flex: 0;
+  min-width: 32px;
+  border-right: 1px solid #6d6d6d;
+  padding: 2px;
+  margin: 0px;
+  background: #3e3d3d;	
+}

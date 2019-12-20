@@ -1,0 +1,78 @@
+*:focus {
+  outline: none;
+}
+
+* {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+html {
+  box-sizing: border-box;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  
+  padding: 0px;
+  margin: 0px;
+  
+  overflow: hidden;
+
+  font-family: Verdana;
+  font-size: 10pt;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  
+  font-family: sans-serif;
+  overflow: hidden;
+
+  line-height: 2;
+}
+
+.main {
+  margin: 0px;
+  padding: 0px;
+  border: 0px solid red;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.maincontainer {
+  margin: 0px;
+  padding: 0px;
+  border: 0px solid red;
+  height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.center {
+  flex: 1;
+  margin: 0px;
+  padding: 0px;
+    
+  background: -moz-linear-gradient(333deg, rgba(97,97,97,1) 0%, rgba(0,0,0,1) 100%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(97,97,97,1)), color-stop(100%, rgba(0,0,0,1)));
+  background: -webkit-linear-gradient(333deg, rgba(97,97,97,1) 0%, rgba(0,0,0,1) 100%);
+  background: -o-linear-gradient(333deg, rgba(97,97,97,1) 0%, rgba(0,0,0,1) 100%);
+  background: -ms-linear-gradient(333deg, rgba(97,97,97,1) 0%, rgba(0,0,0,1) 100%);
+  background: linear-gradient(117deg, rgba(97,97,97,1) 0%, rgba(0,0,0,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#616161', endColorstr='#000000',GradientType=1 );  
+}
