@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import ToolbarTools from './utils/toolbartools';
+
 import '../../css/toolbar.css';
 
 /**
@@ -13,6 +15,8 @@ export class ToolButton extends React.Component {
    */
   constructor(props){
     super(props);
+
+    this.toolbarTools=new ToolbarTools ();
 
     this.state={
       enabled: props.enabled

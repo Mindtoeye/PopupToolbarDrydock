@@ -6,6 +6,8 @@ import ToggleToolButton from './ToggleToolButton';
 import ToolButtonFloat from './ToolButtonFloat';
 import ToggleGroup from './ToggleGroup';
 
+import ToolbarTools from './utils/toolbartools';
+
 import '../../css/toolbar.css';
 import '../../css/dividers.css';
 
@@ -20,8 +22,13 @@ export class ToolBar extends React.Component {
   constructor(props){
     super(props);
 
+    this.toolbarTools=new ToolbarTools ();
+
     this.state = {
+      items: this.toolbarTools.prep(props.data)
     };
+    
+    this.handleIconClicked = this.handleIconClicked.bind(this);
   }
 
   /**
@@ -29,7 +36,8 @@ export class ToolBar extends React.Component {
    */
   handleIconClicked (e) {
     if (this.props.handleIconClicked) {
-      this.props.handleIconClicked (e);
+      let item=this.toolbarTools.findByUUID (e,this.state.items.items);
+      this.props.handleIconClicked (e,item);
     }
   }
 
@@ -66,7 +74,7 @@ export class ToolBar extends React.Component {
         }
 
         if (item.type=="button") {
-          items.push(<ToolButton key={"menu-"+i} buttonid="15" alt={item.alt} title={item.title} onButtonClick={this.handleIconClicked.bind (this)} image={item.image} />);
+          items.push(<ToolButton key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);
         }
 
         if (item.type=="menu") {
@@ -82,8 +90,8 @@ export class ToolBar extends React.Component {
    *
    */
   render () {
-    if (this.props.data) {
-      return (this.renderFromData (this.props.data));
+    if (this.state.items) {
+      return (this.renderFromData (this.state.items));
     }
 
     let toolClass="toolbarvertical";

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import DataTools from './utils/datatools';
+import ToolbarTools from './utils/toolbartools';
 import ToolBar from './ToolBar';
 
 import '../../css/main.css';
@@ -12,7 +13,7 @@ const menu = {
   toolclass: "",
   items: [{
       type: "button",
-      id: "15",
+      id: "1",
       alt: "Main Menu",
       title: "Main Menu",
       image: menuImage
@@ -20,19 +21,19 @@ const menu = {
       type: "divider"
     },{
       type: "button",
-      id: "15",
+      id: "2",
       alt: "Main Menu",
       title: "Main Menu",
       image: menuImage
     },{
       type: "button",
-      id: "15",
+      id: "3",
       alt: "Main Menu",
       title: "Main Menu",
       image: menuImage
     },{
       type: "button",
-      id: "15",
+      id: "4",
       alt: "Main Menu",
       title: "Main Menu",
       image: menuImage
@@ -51,8 +52,13 @@ class DryDock extends Component {
     super(props);
     
     this.dataTools=new DataTools ();
+    this.toolbarTools=new ToolbarTools ();
 
+    // Use the menu object as a template so that we can allow the toolbar code
+    // to add unique identifiers. This way even though the structure is
+    // identical all the menu items are still globally unique
     this.state = {
+      selected: null,
       menu1: this.dataTools.deepCopy (menu),
       menu2: this.dataTools.deepCopy (menu),
       menu3: this.dataTools.deepCopy (menu),
@@ -65,16 +71,18 @@ class DryDock extends Component {
   /**
    *
    */
-  handleIconClicked (anApp) {
-    console.log ("handleIconClicked ()");
+  handleIconClicked (anId,anItem) {
+    console.log ("handleIconClicked ("+anId+")");
 
-    console.log (JSON.stringify(anApp));
+    this.setState ({selected: anItem});
   }
 
   /**
    *
    */
-  render() {
+  render() {    
+    let pre=<pre>{JSON.stringify(this.state.selected, null, 2)}</pre>;
+
     return (
       <div className="divTable unstyledTable">
         <div className="divTableBody">
@@ -91,9 +99,13 @@ class DryDock extends Component {
             </div>
             <div className="divTableCell center">
               <div id="tip" className="tip centered">
-              You should see 4 toolbars each with different configurations, but with the same
-              data being displayed. Not all possible configurations are currently shown however.
-              </div>            
+                You should see 4 toolbars each with different configurations, but with the same
+                data being displayed. Not all possible configurations are currently shown however.
+                <hr />
+                <div className="json">                
+                  {pre}
+                </div>
+              </div>  
             </div>
             <div className="divTableCell filler toolbarwidth">
               <ToolBar direction="vertical" data={this.state.menu2} handleIconClicked={this.handleIconClicked}></ToolBar>

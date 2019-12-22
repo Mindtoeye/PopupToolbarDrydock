@@ -116,3 +116,8 @@ div.unstyledTable {
 .divTableHeading { display: table-header-group;}
 .divTableFoot { display: table-footer-group;}
 .divTableBody { display: table-row-group;}
+
+.json {
+  font-family: "Courier";
+  font-size: 10pt;
+}
