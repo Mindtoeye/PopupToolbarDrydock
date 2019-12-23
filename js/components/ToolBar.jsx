@@ -24,7 +24,7 @@ export class ToolBar extends React.Component {
 
     this.toolbarTools=new ToolbarTools ();
 
-    this.state = {
+    this.state = {      
       items: this.toolbarTools.prep(props.data)
     };
     
@@ -74,7 +74,11 @@ export class ToolBar extends React.Component {
         }
 
         if (item.type=="button") {
-          items.push(<ToolButton key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);
+          if (item.icon) {
+            items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          } else {
+            items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+          }          
         }
 
         if (item.type=="menu") {

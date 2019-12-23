@@ -16,6 +16,10 @@ class ToolbarTools {
   prep (anItemSet) {
   	let prepped=this.dataTools.deepCopy (anItemSet);
 
+  	if (!prepped ["inverted"]) {
+  	  prepped.inverted=false;
+  	}
+
     let items=prepped.items;
 
   	for (let i=0;i<items.length;i++) {

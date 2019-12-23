@@ -11,6 +11,7 @@ import menuImage from '../../css/images/menu.png';
 const menu = {
   direction: "vertical",
   toolclass: "",
+  inverted: true,
   items: [{
       type: "button",
       id: "1",
@@ -24,7 +25,7 @@ const menu = {
       id: "2",
       alt: "Main Menu",
       title: "Main Menu",
-      image: menuImage
+      icon: "add_circle"
     },{
       type: "button",
       id: "3",

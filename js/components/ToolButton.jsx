@@ -45,8 +45,15 @@ export class ToolButton extends React.Component {
    *
    */
   render () {
-  	var anId=this.props.buttonid;
-    var buttonClass="toolicon";
+  	let anId=this.props.buttonid;
+    let buttonClass="toolicon";
+    let inverted=false;
+
+    if (this.props.inverted) {
+      if (this.props.inverted==true) {
+        inverted=true;
+      }
+    }    
 
     if (this.state.enabled==false) {
       buttonClass="toolicon tool-disabled";
@@ -54,10 +61,18 @@ export class ToolButton extends React.Component {
       buttonClass="toolicon hoverable tool-enabled";
     }
 
-    var face=<img src={this.props.image} className="icon" />;
+    let face=<img src={this.props.image} className="icon" />;
+
+    if (inverted==true) {
+      face=<img src={this.props.image} className="icon iconinverted" />;
+    }
 
     if (this.props.icon) {
       face=<i className="material-icons">{this.props.icon}</i>
+
+      if (inverted==true) {
+        face=<i className="material-icons iconinverted">{this.props.icon}</i>
+      }
     }
 
     if ((this.props.image) || (this.props.icon)) {
