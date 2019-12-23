@@ -23,21 +23,33 @@ const menu = {
     },{
       type: "button",
       id: "2",
-      alt: "Main Menu",
-      title: "Main Menu",
+      alt: "Materials Icon Example 1",
+      title: "Materials Icon Example 1",
       icon: "add_circle"
     },{
       type: "button",
       id: "3",
-      alt: "Main Menu",
-      title: "Main Menu",
-      image: menuImage
+      alt: "Materials Icon Example 2",
+      title: "Materials Icon Example 2",
+      icon: "check_circle"
     },{
       type: "button",
       id: "4",
-      alt: "Main Menu",
-      title: "Main Menu",
-      image: menuImage
+      alt: "Character Example 1",
+      title: "Character Example 1",
+      label: "A"
+    },{
+      type: "button",
+      id: "4",
+      alt: "Character Example 2",
+      title: "Character Example 2",
+      label: "b"
+    },{
+      type: "button",
+      id: "4",
+      alt: "Character Example 3",
+      title: "Character Example 3",
+      label: "C"
     }]
 };
 
@@ -73,7 +85,7 @@ class DryDock extends Component {
    *
    */
   handleIconClicked (anId,anItem) {
-    console.log ("handleIconClicked ("+anId+")");
+    //console.log ("handleIconClicked ("+anId+")");
 
     this.setState ({selected: anItem});
   }
@@ -81,8 +93,12 @@ class DryDock extends Component {
   /**
    *
    */
-  render() {    
-    let pre=<pre>{JSON.stringify(this.state.selected, null, 2)}</pre>;
+  render() {
+    let pre;
+
+    if (this.state.selected!=null){
+      pre=<pre>{JSON.stringify(this.state.selected, null, 2)}</pre>;
+    }
 
     return (
       <div className="divTable unstyledTable">

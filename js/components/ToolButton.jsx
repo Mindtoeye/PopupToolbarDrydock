@@ -68,12 +68,17 @@ export class ToolButton extends React.Component {
     }
 
     if (this.props.icon) {
-      face=<i className="material-icons">{this.props.icon}</i>
+      face=<i className="material-icons" style={{margin: "1px"}}>{this.props.icon}</i>
 
       if (inverted==true) {
-        face=<i className="material-icons iconinverted">{this.props.icon}</i>
+        face=<i className="material-icons iconinverted" style={{margin: "1px"}}>{this.props.icon}</i>
       }
     }
+
+    if (this.props.label){
+      let character = this.props.label;
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
+    }    
 
     if ((this.props.image) || (this.props.icon)) {
       return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>)

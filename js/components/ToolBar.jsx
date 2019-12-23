@@ -74,11 +74,15 @@ export class ToolBar extends React.Component {
         }
 
         if (item.type=="button") {
-          if (item.icon) {
-            items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          if (item.label) {
+            items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
           } else {
-            items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
-          }          
+            if (item.icon) {
+              items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+            } else {
+              items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+            }
+          }  
         }
 
         if (item.type=="menu") {

@@ -41,6 +41,7 @@
   margin: 2px;
   padding: 0px;
   overflow: hidden;
+  text-align: center;
 }
 
 .tooliconfloat {
@@ -199,4 +200,11 @@
 
 .toolbarheight {
   height: 36px;
+}
+
+.texticon {
+  color: white;
+  font-size: 22pt;
+  line-height: 22pt;
+  padding: 0px;
 }
