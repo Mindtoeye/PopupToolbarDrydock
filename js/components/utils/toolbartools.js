@@ -15,6 +15,8 @@ class ToolbarTools {
    */
   prep (anItemSet) {
   	let prepped=this.dataTools.deepCopy (anItemSet);
+ 
+    let groupId=this.dataTools.uuidv4 ();
 
   	if (!prepped ["inverted"]) {
   	  prepped.inverted=false;
@@ -25,6 +27,7 @@ class ToolbarTools {
   	for (let i=0;i<items.length;i++) {
   	  let item=items [i];
   	  item.uuid=this.dataTools.uuidv4 ();
+  	  //item.group=item.group + "-"+groupId;
 
       // We must go deeper
   	  if (item.type=="menu") {
@@ -77,6 +80,25 @@ class ToolbarTools {
   	}
 
     return (null);
+  }
+
+  /**
+   *
+   */
+  createGroups (data) {
+  	let groups={};
+  	
+    let items=data.items;
+
+  	for (let i=0;i<items.length;i++) {
+  	  let item=items [i];
+      if (item.group) {
+      	console.log ("Adding group: " + item.group);
+      	groups [item.group] = {name: item.group, selected: null};
+      }
+  	}
+  	
+  	return (groups);
   }
 }
 

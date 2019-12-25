@@ -33,6 +33,8 @@ const menu = {
       title: "Materials Icon Example 2",
       icon: "check_circle"
     },{
+      type: "divider"
+    },{
       type: "button",
       id: "4",
       alt: "Character Example 1",
@@ -50,6 +52,29 @@ const menu = {
       alt: "Character Example 3",
       title: "Character Example 3",
       label: "C"
+    },{
+      type: "divider"
+    },{
+      type: "button",
+      id: "4",
+      alt: "Toggle Example",
+      title: "Toggle Example",
+      label: "1",
+      group: "togglegroup"
+    },{
+      type: "button",
+      id: "4",
+      alt: "Toggle Example",
+      title: "Toggle Example",
+      label: "2",
+      group: "togglegroup"
+    },{
+      type: "button",
+      id: "4",
+      alt: "Toggle Example",
+      title: "Toggle Example",
+      label: "3",
+      group: "togglegroup"
     }]
 };
 
@@ -75,7 +100,7 @@ class DryDock extends Component {
       menu1: this.dataTools.deepCopy (menu),
       menu2: this.dataTools.deepCopy (menu),
       menu3: this.dataTools.deepCopy (menu),
-      menu4: this.dataTools.deepCopy (menu),
+      menu4: this.dataTools.deepCopy (menu)
     };
   
     this.handleIconClicked = this.handleIconClicked.bind(this);

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import ToolbarTools from './utils/toolbartools';
+
 import '../../css/toolbar.css';
 
 /**
@@ -14,57 +16,28 @@ export class ToggleToolButton extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = {
-      on: false,
-      id: props.buttonid,
-      managed: props.managed,
-      mode: props.mode
+    this.toolbarTools=new ToolbarTools ();
+
+    this.state={
+      enabled: props.enabled
     };
-
-    this.propagate.bind (this);
   }
 
   /**
-   *
+   * 
    */  
-  handleIconClicked () {
-    if (this.state.managed==true) {
-      this.propagate ();
-      return;
-    }
-
-    if(this.state.on==false) {
-      this.setState ({on: true},(e)=>{
-      	this.propagate ();
-      });
-    } else {
-      this.setState ({on: false},(e)=>{
-      	this.propagate ();
-      });    	
+  componentWillReceiveProps(nextProps) {            
+    if (typeof nextProps.enabled !== 'undefined') {
+      this.setState ({enabled: nextProps.enabled}); 
     }
   }
 
   /**
    *
-   */
-  setToggleState (aState) {
-    console.log ("setToggleState ("+aState+")");
-    this.setState ({on: aState});         
-  }
-
-  /**
-   *
-   */
-  getId () {
-    return (this.state.id);
-  }
-
-  /**
-   *
    */  
-  propagate () {
-  	if (this.props.onButtonClick) {
-      this.props.onButtonClick (this.state.id);
+  handleIconClicked (anId) {
+    if (this.props.onButtonClick) {
+      this.props.onButtonClick (anId);
     }
   }
 
@@ -72,27 +45,54 @@ export class ToggleToolButton extends React.Component {
    *
    */
   render () {
-  	var anId=this.props.buttonid;
+    let anId=this.props.buttonid;
+    let buttonClass="toolicon";
+    let inverted=false;
 
-    var face=<img src={this.props.image} className="icon" />;
+    if (this.props.inverted) {
+      if (this.props.inverted==true) {
+        inverted=true;
+      }
+    }    
 
-    if (this.props.icon) {
-      face=<i className="material-icons">{this.props.icon}</i>
-    }
-
-    if (this.state.managed==true) {
-      if (this.props.mode==this.props.selected) {
-        return (<div className="toolicon toggleon" role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>); 
+    if (this.state.enabled==false) {
+      buttonClass="toolicon tool-disabled";
+    } else {
+      if (this.props.selected) {
+        if (this.props.selected==this.props.buttonid) {
+          buttonClass="tooliconselected hoverable tool-enabled";
+        } else {
+          buttonClass="toolicon hoverable tool-enabled";            
+        }
       } else {
-        return (<div className="toolicon" role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>);
+        buttonClass="toolicon hoverable tool-enabled";
       }
     }
 
-    if (this.state.on==true) {
-      return (<div className="toolicon toggleon" role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>);	
+    let face=<img src={this.props.image} className="icon" />;
+
+    if (inverted==true) {
+      face=<img src={this.props.image} className="icon iconinverted" />;
     }
 
-    return (<div className="toolicon" role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>);
+    if (this.props.icon) {
+      face=<i className="material-icons" style={{margin: "1px"}}>{this.props.icon}</i>
+
+      if (inverted==true) {
+        face=<i className="material-icons iconinverted" style={{margin: "1px"}}>{this.props.icon}</i>
+      }
+    }
+
+    if (this.props.label){
+      let character = this.props.label;
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
+    }    
+
+    if ((this.props.image) || (this.props.icon)) {
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>)
+    }
+
+    return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{this.props.children}</div>);
   }
 }
 
