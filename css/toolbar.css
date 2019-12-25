@@ -170,13 +170,16 @@
 .popupmenu {
   position: absolute;
   z-index: 1000;
-  background: white;
-  border: 1px solid #dad9d9;
+  /*background: white;*/
+  /*border: 1px solid #dad9d9;*/
   padding: 2px;
   width: 43px;
+  left: 10px;
+  top: 10px;
   -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.26);
   -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.26);
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.26);
+  /*border: 1px solid red;*/
 }
 
 .popupmain {
@@ -218,4 +221,22 @@
   font-size: 22pt;
   line-height: 22pt;
   padding: 0px;
+}
+
+.floathandle {
+  margin-left: 6px;
+  margin-right: 4px;
+  margin-bottom: 6px;
+  margin-top: 6px;
+  border: 1px inset #9a9999;
+  /* border-left: 3px solid #b5b5b5; */
+  padding: 0px; 
+}
+
+.toolbarfiller {
+  background: #2f2f2f;
+}
+
+.toolbarfillermedium {
+  background: #2f2f2f;
 }

@@ -16,8 +16,6 @@ class ToolbarTools {
   prep (anItemSet) {
   	let prepped=this.dataTools.deepCopy (anItemSet);
  
-    let groupId=this.dataTools.uuidv4 ();
-
   	if (!prepped ["inverted"]) {
   	  prepped.inverted=false;
   	}
@@ -27,11 +25,11 @@ class ToolbarTools {
   	for (let i=0;i<items.length;i++) {
   	  let item=items [i];
   	  item.uuid=this.dataTools.uuidv4 ();
-  	  //item.group=item.group + "-"+groupId;
-
+ 
       // We must go deeper
-  	  if (item.type=="menu") {
-  	  	
+  	  if (item.type=="menu") {        
+  	  	items [i]=this.prep(item);
+        console.log (JSON.stringify (item));
   	  }
   	}
 
@@ -44,7 +42,8 @@ class ToolbarTools {
   findById (anItemId,items) {
   	for (let i=0;i<items.length;i++) {
   	  let item=items [i];
-  	  if (item.type=="button") {
+  	  
+  	  if ((item.type=="button") || (item.type=="menu")) {
   	    if (item.id==anItemId) {
   	  	  return (item);
   	    }
@@ -52,7 +51,10 @@ class ToolbarTools {
 
       // We must go deeper
   	  if (item.type=="menu") {
-  	  	
+  	  	let result=this.findById (anItemId,item.items);
+  	  	if (result!=null) {
+  	  	  return (result);
+  	  	}
   	  }
   	}
 
@@ -65,9 +67,8 @@ class ToolbarTools {
   findByUUID (anItemId,items) {
   	for (let i=0;i<items.length;i++) {
   	  let item=items [i];
-  	  if (item.type=="button") {
-  	  	//console.log (JSON.stringify (item));
-  	  	//console.log ("Comparing " + item.uuid + ", to: " + anItemId);
+    
+      if ((item.type=="button") || (item.type=="menu")) {
   	    if (item.uuid==anItemId) {
   	  	  return (item);
   	    }
@@ -75,8 +76,11 @@ class ToolbarTools {
 
       // We must go deeper
   	  if (item.type=="menu") {
-  	  	
-  	  }  	  
+  	  	let result=this.findByUUID (anItemId,item.items);
+  	  	if (result!=null) {
+  	  	  return (result);
+  	  	}
+  	  }	  
   	}
 
     return (null);
@@ -93,7 +97,6 @@ class ToolbarTools {
   	for (let i=0;i<items.length;i++) {
   	  let item=items [i];
       if (item.group) {
-      	console.log ("Adding group: " + item.group);
       	groups [item.group] = {name: item.group, selected: null};
       }
   	}

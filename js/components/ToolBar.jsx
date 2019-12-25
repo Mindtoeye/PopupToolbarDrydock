@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 
 import ToolButton from './ToolButton';
 import ToggleToolButton from './ToggleToolButton';
-import ToolButtonFloat from './ToolButtonFloat';
-import ToggleGroup from './ToggleGroup';
 
 import DataTools from './utils/datatools';
 import ToolbarTools from './utils/toolbartools';
@@ -28,7 +26,8 @@ export class ToolBar extends React.Component {
 
     this.state = {      
       items: this.toolbarTools.prep(props.data),
-      groups: this.toolbarTools.createGroups(props.data)
+      groups: this.toolbarTools.createGroups(props.data),
+      poppedup: null
     };
     
     this.handleIconClicked = this.handleIconClicked.bind(this);
@@ -38,10 +37,22 @@ export class ToolBar extends React.Component {
    * Propagate back up to whomever called us
    */
   handleIconClicked (e) {
-    console.log ("handleIconClicked ("+e+")");
+    //console.log ("handleIconClicked ("+e+")");
+
+    this.setState ({poppedup: null});
 
     if (this.props.handleIconClicked) {
       let item=this.toolbarTools.findByUUID (e,this.state.items.items);
+      if (item==null) {
+        console.log ("Internal error: unable to find menu item object from id");
+        return;
+      }
+
+      if (item.type=="menu") {
+        this.setState ({poppedup: item.uuid});
+        return;
+      }
+
       if (item.group) {        
         let updatedGroups=this.dataTools.deepCopy (this.state.groups);
         let aGroup=updatedGroups [item.group];
@@ -57,6 +68,79 @@ export class ToolBar extends React.Component {
         this.props.handleIconClicked (e,item);
       }
     }
+  }
+
+  /**
+   *
+   */
+  renderItem (item,i) {
+    
+      if (item.group) {
+        let aGroup=this.state.groups [item.group];
+
+        if (item.label) {
+          return(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+        } else {
+          if (item.icon) {
+            return(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          } else {
+            return(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+          }
+        }            
+      } else {
+        if (item.label) {
+          return(<ToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+        } else {
+          if (item.icon) {
+            return(<ToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          } else {
+            return(<ToolButton inverted={this.props.data.inverted} key={"menu-"+item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+          }
+        }  
+      }
+
+    return (<div></div>);
+  }
+
+  /**
+   *
+   */
+  renderBar (data,toolClass) {
+    let items=[];
+
+    for (let i=0;i<data.items.length;i++) {
+      let item=data.items [i];
+
+      if (item.type=="divider") {
+        items.push(<div key={"menu-"+i} className="separatorhorizontal"/>);
+      }
+
+      if ((item.type=="button") || (item.type=="menu")) {
+        let renderItem=this.renderItem (item,i);
+        if (renderItem) {
+          items.push(renderItem);
+        } else {
+          console.log ("bump");
+        }
+      }
+
+      if (item.type=="menu") {
+        if (this.state.poppedup) {
+          if (this.state.poppedup==item.uuid) {
+            let subitems=[];
+            for (let j=0;j<item.items.length;j++) {           
+              let subitem=item.items [j];            
+              subitems.push(this.renderItem (subitem,j));  
+            }              
+
+            let submenu=<div key="submenu" className="popupmenu toolbarfillermedium">{subitems}</div>;
+            items.push (submenu);              
+          }
+        }
+      }
+    }
+
+    return (items);
   }
 
   /**
@@ -84,46 +168,19 @@ export class ToolBar extends React.Component {
     let items=[];
 
     if (data.items) {
-      for (let i=0;i<data.items.length;i++) {
-        let item=data.items [i];
-
-        if (item.type=="divider") {
-          items.push(<div key={"menu-"+i} className="separatorhorizontal"/>);
-        }
-
-        if (item.type=="button") {
-          if (item.group) {
-            let aGroup=this.state.groups [item.group];
-
-            if (item.label) {
-              items.push(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
-            } else {
-              if (item.icon) {
-                items.push(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
-              } else {
-                items.push(<ToggleToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
-              }
-            }            
-          } else {
-            if (item.label) {
-              items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
-            } else {
-              if (item.icon) {
-                items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
-              } else {
-                items.push(<ToolButton inverted={this.props.data.inverted} key={"menu-"+i} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
-              }
-            }  
-          }
-        }
-
-        if (item.type=="menu") {
-          //items.push(<ToolButton buttonid="15" alt={item.alt} title={item.title} onButtonClick={this.handleIconClicked.bind (this)} image={item.image} />);
-        }      
-      }
+      items=this.renderBar (data,toolClass);
     }
+
+    let floatmenu;
+
+    if (data.floatable) {
+      console.log ("ding");
+      if (this.state.items.floatable==true) {
+        floatmenu=<div className="floathandle"></div>;
+      }
+    }    
                   
-    return (<div id="toolbar" className={toolClass}>{items}</div>);   
+    return (<div id="toolbar" className={toolClass}>{floatmenu}{items}</div>);   
   }
 
   /**
@@ -146,7 +203,9 @@ export class ToolBar extends React.Component {
       toolClass = toolClass + " " + this.props.toolclass;
     }
 
-    return (<div id="toolbar" className={toolClass}>{this.props.children}</div>);    
+    return (<div id="toolbar" className={toolClass}>
+       {this.props.children}
+     </div>);
   }
 }
 
