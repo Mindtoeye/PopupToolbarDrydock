@@ -29,7 +29,7 @@ class ToolbarTools {
       // We must go deeper
   	  if (item.type=="menu") {        
   	  	items [i]=this.prep(item);
-        console.log (JSON.stringify (item));
+        //console.log (JSON.stringify (item));
   	  }
   	}
 

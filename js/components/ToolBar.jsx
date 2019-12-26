@@ -37,13 +37,14 @@ export class ToolBar extends React.Component {
     this.handleIconClicked = this.handleIconClicked.bind(this);
     this.onGlobalMouseDown = this.onGlobalMouseDown.bind(this);
 
-    document.body.addEventListener("mousedown", this.onGlobalMouseDown);
+    //document.body.addEventListener("mousedown", this.onGlobalMouseDown);
   }
 
   /**
    *
    */
   onGlobalMouseDown (e) {
+    console.log ("onGlobalMouseDown ()");
     this.setState ({poppedup: null});
   }
 
@@ -68,6 +69,8 @@ export class ToolBar extends React.Component {
           poppedup: item.uuid,
           popupX: loc.x,
           popupY: loc.y
+        },(e) => {
+          this.refs["focusable"].focus();
         });
         return;
       }
@@ -97,22 +100,90 @@ export class ToolBar extends React.Component {
       let aGroup=this.state.groups [item.group];
 
       if (item.label) {
-        return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+        return(<ToggleToolButton 
+          inverted={this.props.data.inverted} 
+          key={item.uuid} 
+          ref={item.uuid} 
+          id={item.uuid} 
+          buttonid={item.uuid} 
+          managed={true} 
+          mode={0} 
+          selected={aGroup.selected} 
+          alt={item.alt} 
+          title={item.title} 
+          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+          label={item.label} />);  
       } else {
         if (item.icon) {
-          return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          return(<ToggleToolButton 
+            inverted={this.props.data.inverted} 
+            key={item.uuid} 
+            ref={item.uuid} 
+            id={item.uuid} 
+            buttonid={item.uuid} 
+            managed={true} 
+            mode={0} 
+            selected={aGroup.selected} 
+            alt={item.alt} 
+            title={item.title} 
+            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+            icon={item.icon} />);  
         } else {
-          return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+          return(<ToggleToolButton 
+            inverted={this.props.data.inverted} 
+            key={item.uuid} 
+            ref={item.uuid} 
+            id={item.uuid} 
+            buttonid={item.uuid} 
+            managed={true} 
+            mode={0} 
+            selected={aGroup.selected} 
+            alt={item.alt} 
+            title={item.title} 
+            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+            image={item.image} />);  
         }
       }            
     } else {
       if (item.label) {
-        return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+        return(<ToolButton 
+          inverted={this.props.data.inverted} 
+          key={item.uuid} 
+          ref={item.uuid} 
+          id={item.uuid} 
+          buttonid={item.uuid} 
+          alt={item.alt} 
+          title={item.title} 
+          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+          label={item.label} />);  
       } else {
         if (item.icon) {
-          return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+          return(<ToolButton 
+            inverted={this.props.data.inverted} 
+            key={item.uuid} 
+            ref={item.uuid} 
+            id={item.uuid} 
+            buttonid={item.uuid} 
+            alt={item.alt} 
+            title={item.title} 
+            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+            icon={item.icon} />);  
         } else {
-          return(<ToolButton inverted={this.props.data.inverted} key={item.uuid}ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+          return(<ToolButton 
+            inverted={this.props.data.inverted} 
+            key={item.uuid}ref={item.uuid} 
+            id={item.uuid} 
+            buttonid={item.uuid} 
+            alt={item.alt} 
+            title={item.title} 
+            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+            image={item.image} />);  
         }
       }  
     }
@@ -151,7 +222,7 @@ export class ToolBar extends React.Component {
               subitems.push(this.renderItem (subitem));  
             }              
 
-            let submenu=<div key="submenu" className="popupmenu toolbarfillermedium" style={{left: (this.state.popupX+10), top: (this.state.popupY+10)}}>{subitems}</div>;
+            let submenu=<div key="submenu" tabIndex="0" ref="focusable" onBlur={this.onGlobalMouseDown} className="popupmenu toolbarfillermedium" style={{left: (this.state.popupX+10), top: (this.state.popupY+10)}}>{subitems}</div>;
             items.push (submenu);              
           }
         }
