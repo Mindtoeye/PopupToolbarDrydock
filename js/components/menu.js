@@ -81,5 +81,26 @@ export const menu = {
       title: "Toggle Example",
       label: "3",
       group: "togglegroup"
-    }]
+    },{
+      type: "divider"
+    },{
+      type: "menu",
+      id: "11",
+      alt: "Secondary Menu",
+      title: "Secondary Menu",
+      image: menuImage,
+      items: [{
+        type: "button",
+        id: "111",
+        alt: "Sub Menu Item A",
+        title: "Sub Menu Item A",
+        label: "3"
+      },{
+        type: "button",
+        id: "112",
+        alt: "Sub Menu Item B",
+        title: "Sub Menu Item B",
+        label: "4"
+      }],    	
+	}]
 };

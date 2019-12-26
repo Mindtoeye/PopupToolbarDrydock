@@ -21,6 +21,8 @@ export class ToggleToolButton extends React.Component {
     this.state={
       enabled: props.enabled
     };
+
+    this.handleIconClicked = this.handleIconClicked.bind(this);
   }
 
   /**
@@ -36,6 +38,7 @@ export class ToggleToolButton extends React.Component {
    *
    */  
   handleIconClicked (anId) {
+    console.log ("handleIconClicked ("+anId+")");
     if (this.props.onButtonClick) {
       this.props.onButtonClick (anId);
     }

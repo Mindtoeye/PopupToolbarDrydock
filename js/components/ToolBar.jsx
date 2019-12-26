@@ -35,8 +35,9 @@ export class ToolBar extends React.Component {
     };
     
     this.handleIconClicked = this.handleIconClicked.bind(this);
+    this.onGlobalMouseDown = this.onGlobalMouseDown.bind(this);
 
-    document.body.addEventListener("mousedown", this.onGlobalMouseDown.bind(this));
+    document.body.addEventListener("mousedown", this.onGlobalMouseDown);
   }
 
   /**
@@ -50,7 +51,7 @@ export class ToolBar extends React.Component {
    * Propagate back up to whomever called us
    */
   handleIconClicked (e) {
-    //console.log ("handleIconClicked ("+e+")");
+    console.log ("handleIconClicked ("+e+")");
 
     this.setState ({poppedup: null});
 
@@ -62,8 +63,7 @@ export class ToolBar extends React.Component {
       }
 
       if (item.type=="menu") {
-        let loc=this.DOMTools.getElementLocation (this.refs,item.uuid);
-        console.log (JSON.stringify (loc));
+        let loc=this.DOMTools.getElementLocation (this.refs,item.uuid);        
         this.setState ({
           poppedup: item.uuid,
           popupX: loc.x,
@@ -92,30 +92,30 @@ export class ToolBar extends React.Component {
   /**
    *
    */
-  renderItem (item,i) {
-      if (item.group) {
-        let aGroup=this.state.groups [item.group];
+  renderItem (item) {
+    if (item.group) {
+      let aGroup=this.state.groups [item.group];
 
-        if (item.label) {
-          return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
-        } else {
-          if (item.icon) {
-            return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
-          } else {
-            return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
-          }
-        }            
+      if (item.label) {
+        return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
       } else {
-        if (item.label) {
-          return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+        if (item.icon) {
+          return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
         } else {
-          if (item.icon) {
-            return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
-          } else {
-            return(<ToolButton inverted={this.props.data.inverted} key={item.uuid}ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
-          }
-        }  
-      }
+          return(<ToggleToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} managed={true} mode={0} selected={aGroup.selected} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+        }
+      }            
+    } else {
+      if (item.label) {
+        return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} label={item.label} />);  
+      } else {
+        if (item.icon) {
+          return(<ToolButton inverted={this.props.data.inverted} key={item.uuid} ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} icon={item.icon} />);  
+        } else {
+          return(<ToolButton inverted={this.props.data.inverted} key={item.uuid}ref={item.uuid} id={item.uuid} buttonid={item.uuid} alt={item.alt} title={item.title} onButtonClick={(e) => this.handleIconClicked (item.uuid)} image={item.image} />);  
+        }
+      }  
+    }
 
     return (<div></div>);
   }
@@ -134,7 +134,7 @@ export class ToolBar extends React.Component {
       }
 
       if ((item.type=="button") || (item.type=="menu")) {
-        let renderItem=this.renderItem (item,i);
+        let renderItem=this.renderItem (item);
         if (renderItem) {
           items.push(renderItem);
         } else {
@@ -148,7 +148,7 @@ export class ToolBar extends React.Component {
             let subitems=[];
             for (let j=0;j<item.items.length;j++) {           
               let subitem=item.items [j];            
-              subitems.push(this.renderItem (subitem,j));  
+              subitems.push(this.renderItem (subitem));  
             }              
 
             let submenu=<div key="submenu" className="popupmenu toolbarfillermedium" style={{left: (this.state.popupX+10), top: (this.state.popupY+10)}}>{subitems}</div>;
