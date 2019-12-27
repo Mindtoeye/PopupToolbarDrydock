@@ -1,6 +1,7 @@
 
 .toolbarvertical {
   /*width: 32px;*/
+  position: relative;
   display: flex;
   margin: 0px;
   flex-direction: column;
@@ -8,6 +9,7 @@
 
 .toolbarhorizontal {
   /*flex: 1;*/
+  position: relative;
   display: flex;
   flex-direction: row;
 }
@@ -168,7 +170,7 @@
 }
 
 .popupmenu {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
 
   /*width: 32px;*/
@@ -178,8 +180,10 @@
 
   padding: 2px;
 
+  /*
   left: 10px;
   top: 10px;
+  */
 
   -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.26);
   -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.26);
@@ -234,3 +238,8 @@
 .toolbarfillermedium {
   background: #3a3939;
 }
+
+.toolbarshadow {
+  background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ddd 10px, #ddd 20px );
+}
+

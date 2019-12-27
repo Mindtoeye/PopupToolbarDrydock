@@ -80,14 +80,14 @@ export class ToolButton extends React.Component {
 
     if (this.props.label){
       let character = this.props.label;
-      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
     }    
 
     if ((this.props.image) || (this.props.icon)) {
-      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>)
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{face}</div>)
     }
 
-    return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{this.props.children}</div>);
+    return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{this.props.children}</div>);
   }
 }
 

@@ -45,10 +45,18 @@ class DryDock extends Component {
    *
    */
   render() {
-    let pre;
+    let title;
+    let id;
+    let type;
 
-    if (this.state.selected!=null){
-      pre=<pre>{JSON.stringify(this.state.selected, null, 2)}</pre>;
+    if (this.state.selected) {
+      title="Title: " + this.state.selected.title;
+      id="ID: " + this.state.selected.id;
+      type="Type: " + this.state.selected.type;
+
+      if (this.state.selected.group) {
+        type="Type: " + this.state.selected.type + " (toggle)";
+      }
     }
 
     return (
@@ -72,7 +80,11 @@ class DryDock extends Component {
                 however.
                 <hr />
                 <div className="json">                
-                  {pre}
+                  {title}
+                  <br/>
+                  {id}
+                  <br/>
+                  {type}                  
                 </div>
               </div>  
             </div>

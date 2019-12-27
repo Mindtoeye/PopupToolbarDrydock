@@ -88,14 +88,14 @@ export class ToggleToolButton extends React.Component {
 
     if (this.props.label){
       let character = this.props.label;
-      return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
+      return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
     }    
 
     if ((this.props.image) || (this.props.icon)) {
-      return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{face}</div>)
+      return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{face}</div>)
     }
 
-    return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.alt} title={this.props.title}>{this.props.children}</div>);
+    return (<div key={this.props.id} className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{this.props.children}</div>);
   }
 }
 

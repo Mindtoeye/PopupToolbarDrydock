@@ -36,24 +36,19 @@ export class ToolBar extends React.Component {
     
     this.handleIconClicked = this.handleIconClicked.bind(this);
     this.onGlobalMouseDown = this.onGlobalMouseDown.bind(this);
-
-    //document.body.addEventListener("mousedown", this.onGlobalMouseDown);
   }
 
   /**
    *
    */
   onGlobalMouseDown (e) {
-    console.log ("onGlobalMouseDown ()");
-    this.setState ({poppedup: null});
+    //this.setState ({poppedup: null});
   }
 
   /**
    * Propagate back up to whomever called us
    */
   handleIconClicked (e) {
-    console.log ("handleIconClicked ("+e+")");
-
     this.setState ({poppedup: null});
 
     if (this.props.handleIconClicked) {
@@ -64,11 +59,17 @@ export class ToolBar extends React.Component {
       }
 
       if (item.type=="menu") {
-        let loc=this.DOMTools.getElementLocation (this.refs,item.uuid);        
+        // Get the location of the button that should visually anchor
+        // the sub menu
+        let loc=this.DOMTools.getElementLocation (this.refs,item.uuid);
+
+        let x=loc.x;
+        let y=loc.y;
+
         this.setState ({
           poppedup: item.uuid,
-          popupX: loc.x,
-          popupY: loc.y
+          popupX: x,
+          popupY: y
         },(e) => {
           this.refs["focusable"].focus();
         });
@@ -109,7 +110,6 @@ export class ToolBar extends React.Component {
           managed={true} 
           mode={0} 
           selected={aGroup.selected} 
-          alt={item.alt} 
           title={item.title} 
           handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
           onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -125,7 +125,6 @@ export class ToolBar extends React.Component {
             managed={true} 
             mode={0} 
             selected={aGroup.selected} 
-            alt={item.alt} 
             title={item.title} 
             handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
             onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -140,7 +139,6 @@ export class ToolBar extends React.Component {
             managed={true} 
             mode={0} 
             selected={aGroup.selected} 
-            alt={item.alt} 
             title={item.title} 
             handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
             onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -155,7 +153,6 @@ export class ToolBar extends React.Component {
           ref={item.uuid} 
           id={item.uuid} 
           buttonid={item.uuid} 
-          alt={item.alt} 
           title={item.title} 
           handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
           onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -168,7 +165,6 @@ export class ToolBar extends React.Component {
             ref={item.uuid} 
             id={item.uuid} 
             buttonid={item.uuid} 
-            alt={item.alt} 
             title={item.title} 
             handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
             onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -179,7 +175,6 @@ export class ToolBar extends React.Component {
             key={item.uuid}ref={item.uuid} 
             id={item.uuid} 
             buttonid={item.uuid} 
-            alt={item.alt} 
             title={item.title} 
             handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
             onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
@@ -222,7 +217,26 @@ export class ToolBar extends React.Component {
               subitems.push(this.renderItem (subitem));  
             }              
 
-            let submenu=<div key="submenu" tabIndex="0" ref="focusable" onBlur={this.onGlobalMouseDown} className="popupmenu toolbarfillermedium" style={{left: (this.state.popupX+10), top: (this.state.popupY+10)}}>{subitems}</div>;
+            let calculatedStyle={left: (this.state.popupX+10), top: (this.state.popupY+10)};
+
+            let w=window.innerWidth;
+            let h=window.innerHeight;
+
+            console.log ("midX: " + (w/2) + ", midY: " + (h/2) + " => ("+this.state.popupX+","+this.state.popupY+")");
+
+            if ((this.state.popupX>(w/2)) && (this.state.popupY>(h/2))) {
+              calculatedStyle={right: (10), bottom: (10)};
+            } else {
+             if (this.state.popupX>(w/2)) {
+               calculatedStyle={right: (10), top: (10)};
+             } else {
+               if (this.state.popupY>(h/2)) {
+                 calculatedStyle={left: (10), bottom: (10)};
+               }               
+             }
+            }
+
+            let submenu=<div key="submenu" tabIndex="0" ref="focusable" onBlur={this.onGlobalMouseDown} className="popupmenu toolbarfillermedium" style={calculatedStyle}>{subitems}</div>;
             items.push (submenu);              
           }
         }

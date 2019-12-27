@@ -27,6 +27,8 @@ html {
 
   font-family: Verdana;
   font-size: 10pt;
+
+  background: #2f2f2f;
 }
 
 *, *:before, *:after {
