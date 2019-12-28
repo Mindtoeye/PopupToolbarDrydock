@@ -59,6 +59,10 @@ export class ToolBar extends React.Component {
       }
 
       if (item.type=="menu") {
+        if (this.state.poppedup==item.uuid) {
+          this.setState ({poppedup: null});
+          return;
+        }
         // Get the location of the button that should visually anchor
         // the sub menu
         let loc=this.DOMTools.getElementLocation (this.refs,item.uuid);
@@ -221,17 +225,19 @@ export class ToolBar extends React.Component {
 
             let w=window.innerWidth;
             let h=window.innerHeight;
+            let wMid=(window.innerWidth/2);
+            let hMid=(window.innerHeight/2);
 
-            console.log ("midX: " + (w/2) + ", midY: " + (h/2) + " => ("+this.state.popupX+","+this.state.popupY+")");
+            console.log ("midX: " + wMid + ", midY: " + hMid + " => ("+this.state.popupX+","+this.state.popupY+")");
 
-            if ((this.state.popupX>(w/2)) && (this.state.popupY>(h/2))) {
+            if ((this.state.popupX>wMid) && (this.state.popupY>hMid)) {
               calculatedStyle={right: (10), bottom: (10)};
             } else {
-             if (this.state.popupX>(w/2)) {
-               calculatedStyle={right: (10), top: (10)};
+             if (this.state.popupX>wMid) {
+               calculatedStyle={right: (10), top: (this.state.popupY+10)};
              } else {
-               if (this.state.popupY>(h/2)) {
-                 calculatedStyle={left: (10), bottom: (10)};
+               if (this.state.popupY>hMid) {
+                 calculatedStyle={left: (this.state.popupX+10), bottom: (10)};
                }               
              }
             }
