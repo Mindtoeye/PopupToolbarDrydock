@@ -42,7 +42,7 @@ export class ToolBar extends React.Component {
    *
    */
   onGlobalMouseDown (e) {
-    //this.setState ({poppedup: null});
+    this.setState ({poppedup: null});
   }
 
   /**
