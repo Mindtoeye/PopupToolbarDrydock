@@ -82,42 +82,32 @@ export class ToolBar extends React.Component {
       }
 
       if (item.group) {
-        //let selected = null;
         let aParent = this.toolbarTools.getParent (item,this.state.items.items);
+        let updatedGroups=this.dataTools.deepCopy (this.state.groups);  
 
         if (aParent!=null) {
-          console.log ("We have a parent");
           if (aParent.group!=null) {
-            console.log ("We have found a group id")
-
-            let updatedGroups=this.dataTools.deepCopy (this.state.groups);            
             let aGroup=updatedGroups [aParent.group];
             if (aGroup!=null) {
-              console.log ("We have a parent group, selecting ...")
               aGroup.selected=aParent.uuid;
-              this.setState ({
-                groups: updatedGroups},(e) => {
-                this.props.handleIconClicked (e,item);
-              });
-            } else {
-              console.log ("Internal error: no group found for selected toggle button");
             }
           }
-        } else {
-          console.log ("This button has a group but no parent");
         }
 
-        let updatedGroups=this.dataTools.deepCopy (this.state.groups);
+        //let updatedGroups=this.dataTools.deepCopy (this.state.groups);
         let aGroup=updatedGroups [item.group];
         if (aGroup!=null) {
           aGroup.selected=item.uuid;
           this.setState ({
-            groups: updatedGroups},(e) => {
+            groups: updatedGroups
+          },(e) => {
+            //console.log (JSON.stringify (this.state.groups));
             this.props.handleIconClicked (e,item);
           });
         } else {
           console.log ("Internal error: no group found for selected toggle button");
         }
+
       } else {
         this.props.handleIconClicked (e,item);
       }
@@ -128,93 +118,68 @@ export class ToolBar extends React.Component {
    *
    */
   renderItem (item) {
+    let groupId="";
+
     if (item.group) {
       let aGroup=this.state.groups [item.group];
-
-      if (item.label) {
-        return(<ToggleToolButton 
-          inverted={this.props.data.inverted} 
-          key={item.uuid} 
-          ref={item.uuid} 
-          id={item.uuid} 
-          buttonid={item.uuid} 
-          managed={true} 
-          mode={0} 
-          selected={aGroup.selected} 
-          title={item.title} 
-          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-          label={item.label} />);  
-      } else {
-        if (item.icon) {
-          return(<ToggleToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            managed={true} 
-            mode={0} 
-            selected={aGroup.selected} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            icon={item.icon} />);  
-        } else {
-          return(<ToggleToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            managed={true} 
-            mode={0} 
-            selected={aGroup.selected} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            image={item.image} />);  
-        }
-      }            
-    } else {
-      if (item.label) {
-        return(<ToolButton 
-          inverted={this.props.data.inverted} 
-          key={item.uuid} 
-          ref={item.uuid} 
-          id={item.uuid} 
-          buttonid={item.uuid} 
-          title={item.title} 
-          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-          label={item.label} />);  
-      } else {
-        if (item.icon) {
-          return(<ToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            icon={item.icon} />);  
-        } else {
-          return(<ToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid}ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            image={item.image} />);  
-        }
-      }  
+      if (aGroup) {
+        groupId=aGroup.selected;
+      }
     }
 
-    return (<div></div>);
+    if (item.label) {
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid} 
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        label={item.label} />);  
+    }
+
+    if (item.icon) {
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid}
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        icon={item.icon} />);  
+    }
+
+    if (item.image) {    
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid}
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        image={item.image} />);
+    }
+
+    return(<ToggleToolButton 
+      inverted={this.props.data.inverted} 
+      key={item.uuid} 
+      ref={item.uuid} 
+      id={item.uuid} 
+      buttonid={item.uuid}
+      selected={groupId} 
+      title={item.title} 
+      handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+      onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+      label="E" />); 
   }
 
   /**
@@ -234,8 +199,6 @@ export class ToolBar extends React.Component {
         let renderItem=this.renderItem (item);
         if (renderItem) {
           items.push(renderItem);
-        } else {
-          console.log ("bump");
         }
       }
 

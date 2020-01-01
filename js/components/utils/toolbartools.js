@@ -41,7 +41,8 @@ class ToolbarTools {
    */
   getParent (anItem,items) {
     let anItemId=anItem.uuid;
-    console.log ("getParent ("+anItemId+")");
+    
+    //console.log ("getParent ("+anItemId+")");
 
     for (let i=0;i<items.length;i++) {
       let item=items [i];
@@ -61,13 +62,14 @@ class ToolbarTools {
    *
    */
   getParentSub (aParent,items) {
-    console.log ("getParentSub ("+aParent+")");
+    //console.log ("getParentSub ("+aParent+")");
     
     for (let i=0;i<items.length;i++) {
       let item=items [i];
       
       if ((item.type=="button") || (item.type=="menu")) {
-        if (item.id==aParent) {
+        //console.log ("Comparing item " + item.uuid + " to: " + aParent);
+        if (item.uuid==aParent) {
           return (true);
         }
       }
