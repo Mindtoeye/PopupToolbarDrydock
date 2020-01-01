@@ -76,17 +76,39 @@ export const menu = {
       type: "menu",
       id: "11",
       title: "Secondary Menu",
-      image: menuImage,
+      image: menuImage,      
+      group: "menugroup",
       items: [{
         type: "button",
-        id: "111",
-        title: "Sub Menu Item A",
+        id: "311",
+        title: "Sub Menu Item A1",
+        group: "menugroup1",
         label: "3"
       },{
         type: "button",
-        id: "112",
-        title: "Sub Menu Item B",
+        id: "312",
+        title: "Sub Menu Item B1",
+        group: "menugroup1",
         label: "4"
+      }],    	
+	},{
+      type: "menu",
+      id: "11",
+      title: "Secondary Menu",
+      image: menuImage,
+      group: "menugroup",
+      items: [{
+        type: "button",
+        id: "411",
+        title: "Sub Menu Item A2",
+        group: "menugroup2",
+        label: "5"
+      },{
+        type: "button",
+        id: "412",
+        title: "Sub Menu Item B2",
+        group: "menugroup2",
+        label: "6"
       }],    	
 	}]
 };

@@ -42,7 +42,7 @@ export class ToolBar extends React.Component {
    *
    */
   onGlobalMouseDown (e) {
-    this.setState ({poppedup: null});
+    //this.setState ({poppedup: null});
   }
 
   /**
@@ -58,6 +58,7 @@ export class ToolBar extends React.Component {
         return;
       }
 
+      // Remember that a menu can also be part of a group
       if (item.type=="menu") {
         if (this.state.poppedup==item.uuid) {
           this.setState ({poppedup: null});
@@ -80,12 +81,38 @@ export class ToolBar extends React.Component {
         return;
       }
 
-      if (item.group) {        
+      if (item.group) {
+        //let selected = null;
+        let aParent = this.toolbarTools.getParent (item,this.state.items.items);
+
+        if (aParent!=null) {
+          console.log ("We have a parent");
+          if (aParent.group!=null) {
+            console.log ("We have found a group id")
+
+            let updatedGroups=this.dataTools.deepCopy (this.state.groups);            
+            let aGroup=updatedGroups [aParent.group];
+            if (aGroup!=null) {
+              console.log ("We have a parent group, selecting ...")
+              aGroup.selected=aParent.uuid;
+              this.setState ({
+                groups: updatedGroups},(e) => {
+                this.props.handleIconClicked (e,item);
+              });
+            } else {
+              console.log ("Internal error: no group found for selected toggle button");
+            }
+          }
+        } else {
+          console.log ("This button has a group but no parent");
+        }
+
         let updatedGroups=this.dataTools.deepCopy (this.state.groups);
         let aGroup=updatedGroups [item.group];
         if (aGroup!=null) {
           aGroup.selected=item.uuid;
-          this.setState ({groups: updatedGroups},(e) => {
+          this.setState ({
+            groups: updatedGroups},(e) => {
             this.props.handleIconClicked (e,item);
           });
         } else {
