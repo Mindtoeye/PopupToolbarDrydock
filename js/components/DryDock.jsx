@@ -37,6 +37,13 @@ class DryDock extends Component {
   /**
    *
    */
+  componentDidMount () {
+    this.refs ["toggletest"].toggleDefaultItem ("9");
+  }
+
+  /**
+   *
+   */
   handleIconClicked (anId,anItem) {
     this.setState ({selected: anItem});
   }
@@ -71,7 +78,7 @@ class DryDock extends Component {
           </div>
           <div className="divTableRow">
             <div className="divTableCell filler toolbarwidth">
-              <ToolBar direction="vertical" data={this.state.menu2} handleIconClicked={this.handleIconClicked}></ToolBar>
+              <ToolBar direction="vertical" ref="toggletest" data={this.state.menu2} handleIconClicked={this.handleIconClicked}></ToolBar>
             </div>
             <div className="divTableCell center">
               <div id="tip" className="tip centered">

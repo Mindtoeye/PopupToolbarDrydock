@@ -41,8 +41,32 @@ export class ToolBar extends React.Component {
   /**
    *
    */
+  toggleDefaultItem (anId) {
+    console.log ("toggleDefaultItem ("+anId+")")
+
+    let groups=this.dataTools.deepCopy (this.state.groups);
+    
+    for (let i=0;i<this.state.items.items.length;i++) {
+      let item=this.state.items.items [i];
+
+      if (item.id==anId) {
+        if (item.group) {
+          let toggledId=item.uuid;
+          groups [item.group].selected=toggledId;          
+        }
+      }
+    }
+
+    this.setState ({
+      groups: groups
+    });
+  }
+
+  /**
+   *
+   */
   onGlobalMouseDown (e) {
-    //this.setState ({poppedup: null});
+    this.setState ({poppedup: null});
   }
 
   /**
@@ -94,14 +118,12 @@ export class ToolBar extends React.Component {
           }
         }
 
-        //let updatedGroups=this.dataTools.deepCopy (this.state.groups);
         let aGroup=updatedGroups [item.group];
         if (aGroup!=null) {
           aGroup.selected=item.uuid;
           this.setState ({
             groups: updatedGroups
           },(e) => {
-            //console.log (JSON.stringify (this.state.groups));
             this.props.handleIconClicked (e,item);
           });
         } else {
@@ -208,7 +230,17 @@ export class ToolBar extends React.Component {
             let subitems=[];
             for (let j=0;j<item.items.length;j++) {           
               let subitem=item.items [j];            
-              subitems.push(this.renderItem (subitem));  
+
+              if (subitem.type=="divider") {
+                subitems.push(<div key={"submenu-"+j} className="separatorhorizontal"/>);
+              }
+
+              if ((subitem.type=="button") || (subitem.type=="menu")) {
+                let renderItem=this.renderItem (subitem);
+                if (renderItem) {
+                  subitems.push(renderItem);
+                }
+              }
             }              
 
             let calculatedStyle={left: (this.state.popupX+10), top: (this.state.popupY+10)};
@@ -218,7 +250,7 @@ export class ToolBar extends React.Component {
             let wMid=(window.innerWidth/2);
             let hMid=(window.innerHeight/2);
 
-            console.log ("midX: " + wMid + ", midY: " + hMid + " => ("+this.state.popupX+","+this.state.popupY+")");
+            //console.log ("midX: " + wMid + ", midY: " + hMid + " => ("+this.state.popupX+","+this.state.popupY+")");
 
             if ((this.state.popupX>wMid) && (this.state.popupY>hMid)) {
               calculatedStyle={right: (10), bottom: (10)};
