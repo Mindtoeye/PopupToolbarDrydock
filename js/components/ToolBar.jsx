@@ -41,6 +41,30 @@ export class ToolBar extends React.Component {
   /**
    *
    */
+  toggleDefaultItem (anId) {
+    console.log ("toggleDefaultItem ("+anId+")")
+
+    let groups=this.dataTools.deepCopy (this.state.groups);
+    
+    for (let i=0;i<this.state.items.items.length;i++) {
+      let item=this.state.items.items [i];
+
+      if (item.id==anId) {
+        if (item.group) {
+          let toggledId=item.uuid;
+          groups [item.group].selected=toggledId;          
+        }
+      }
+    }
+
+    this.setState ({
+      groups: groups
+    });
+  }
+
+  /**
+   *
+   */
   onGlobalMouseDown (e) {
     this.setState ({poppedup: null});
   }
@@ -58,6 +82,7 @@ export class ToolBar extends React.Component {
         return;
       }
 
+      // Remember that a menu can also be part of a group
       if (item.type=="menu") {
         if (this.state.poppedup==item.uuid) {
           this.setState ({poppedup: null});
@@ -80,17 +105,31 @@ export class ToolBar extends React.Component {
         return;
       }
 
-      if (item.group) {        
-        let updatedGroups=this.dataTools.deepCopy (this.state.groups);
+      if (item.group) {
+        let aParent = this.toolbarTools.getParent (item,this.state.items.items);
+        let updatedGroups=this.dataTools.deepCopy (this.state.groups);  
+
+        if (aParent!=null) {
+          if (aParent.group!=null) {
+            let aGroup=updatedGroups [aParent.group];
+            if (aGroup!=null) {
+              aGroup.selected=aParent.uuid;
+            }
+          }
+        }
+
         let aGroup=updatedGroups [item.group];
         if (aGroup!=null) {
           aGroup.selected=item.uuid;
-          this.setState ({groups: updatedGroups},(e) => {
+          this.setState ({
+            groups: updatedGroups
+          },(e) => {
             this.props.handleIconClicked (e,item);
           });
         } else {
           console.log ("Internal error: no group found for selected toggle button");
         }
+
       } else {
         this.props.handleIconClicked (e,item);
       }
@@ -101,93 +140,68 @@ export class ToolBar extends React.Component {
    *
    */
   renderItem (item) {
+    let groupId="";
+
     if (item.group) {
       let aGroup=this.state.groups [item.group];
-
-      if (item.label) {
-        return(<ToggleToolButton 
-          inverted={this.props.data.inverted} 
-          key={item.uuid} 
-          ref={item.uuid} 
-          id={item.uuid} 
-          buttonid={item.uuid} 
-          managed={true} 
-          mode={0} 
-          selected={aGroup.selected} 
-          title={item.title} 
-          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-          label={item.label} />);  
-      } else {
-        if (item.icon) {
-          return(<ToggleToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            managed={true} 
-            mode={0} 
-            selected={aGroup.selected} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            icon={item.icon} />);  
-        } else {
-          return(<ToggleToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            managed={true} 
-            mode={0} 
-            selected={aGroup.selected} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            image={item.image} />);  
-        }
-      }            
-    } else {
-      if (item.label) {
-        return(<ToolButton 
-          inverted={this.props.data.inverted} 
-          key={item.uuid} 
-          ref={item.uuid} 
-          id={item.uuid} 
-          buttonid={item.uuid} 
-          title={item.title} 
-          handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-          onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-          label={item.label} />);  
-      } else {
-        if (item.icon) {
-          return(<ToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid} 
-            ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            icon={item.icon} />);  
-        } else {
-          return(<ToolButton 
-            inverted={this.props.data.inverted} 
-            key={item.uuid}ref={item.uuid} 
-            id={item.uuid} 
-            buttonid={item.uuid} 
-            title={item.title} 
-            handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
-            onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
-            image={item.image} />);  
-        }
-      }  
+      if (aGroup) {
+        groupId=aGroup.selected;
+      }
     }
 
-    return (<div></div>);
+    if (item.label) {
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid} 
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        label={item.label} />);  
+    }
+
+    if (item.icon) {
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid}
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        icon={item.icon} />);  
+    }
+
+    if (item.image) {    
+      return(<ToggleToolButton 
+        inverted={this.props.data.inverted} 
+        key={item.uuid} 
+        ref={item.uuid} 
+        id={item.uuid} 
+        buttonid={item.uuid}
+        selected={groupId} 
+        title={item.title} 
+        handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+        onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+        image={item.image} />);
+    }
+
+    return(<ToggleToolButton 
+      inverted={this.props.data.inverted} 
+      key={item.uuid} 
+      ref={item.uuid} 
+      id={item.uuid} 
+      buttonid={item.uuid}
+      selected={groupId} 
+      title={item.title} 
+      handleFocusOut={(e) => this.onGlobalMouseDown (e)} 
+      onButtonClick={(e) => this.handleIconClicked (item.uuid)} 
+      label="E" />); 
   }
 
   /**
@@ -207,8 +221,6 @@ export class ToolBar extends React.Component {
         let renderItem=this.renderItem (item);
         if (renderItem) {
           items.push(renderItem);
-        } else {
-          console.log ("bump");
         }
       }
 
@@ -218,7 +230,17 @@ export class ToolBar extends React.Component {
             let subitems=[];
             for (let j=0;j<item.items.length;j++) {           
               let subitem=item.items [j];            
-              subitems.push(this.renderItem (subitem));  
+
+              if (subitem.type=="divider") {
+                subitems.push(<div key={"submenu-"+j} className="separatorhorizontal"/>);
+              }
+
+              if ((subitem.type=="button") || (subitem.type=="menu")) {
+                let renderItem=this.renderItem (subitem);
+                if (renderItem) {
+                  subitems.push(renderItem);
+                }
+              }
             }              
 
             let calculatedStyle={left: (this.state.popupX+10), top: (this.state.popupY+10)};
@@ -228,7 +250,7 @@ export class ToolBar extends React.Component {
             let wMid=(window.innerWidth/2);
             let hMid=(window.innerHeight/2);
 
-            console.log ("midX: " + wMid + ", midY: " + hMid + " => ("+this.state.popupX+","+this.state.popupY+")");
+            //console.log ("midX: " + wMid + ", midY: " + hMid + " => ("+this.state.popupX+","+this.state.popupY+")");
 
             if ((this.state.popupX>wMid) && (this.state.popupY>hMid)) {
               calculatedStyle={right: (10), bottom: (10)};
