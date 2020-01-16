@@ -106,14 +106,36 @@ export class ToolBar extends React.Component {
       }
 
       if (item.group) {
-        let aParent = this.toolbarTools.getParent (item,this.state.items.items);
         let updatedGroups=this.dataTools.deepCopy (this.state.groups);  
+        
+        // Get the parent item for the selected button (assuming there is one)
+        let aParent = this.toolbarTools.getParent (item,this.state.items.items);
 
+        // We have a parent
         if (aParent!=null) {
+          // Not only do we have a parent, that parent is also in a group
           if (aParent.group!=null) {
             let aGroup=updatedGroups [aParent.group];
             if (aGroup!=null) {
               aGroup.selected=aParent.uuid;
+            }
+
+            // Now find all items that have the same parent group and if they
+            // represent a sub-menu, then reset the selection for that group
+
+            for (let i=0;i < this.state.items.items.length;i++) {
+              let testItem=this.state.items.items [i];
+              if (testItem.group) {
+                if (testItem.group==aParent.group) {
+                  if (testItem.items) {
+                    for (let j=0;j<testItem.items.length;j++) {
+                      if (testItem.items [j].group) {
+                        updatedGroups [testItem.items [j].group].selected=null;
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -124,12 +146,12 @@ export class ToolBar extends React.Component {
           this.setState ({
             groups: updatedGroups
           },(e) => {
+            //console.log (JSON.stringify (updatedGroups,null,2));
             this.props.handleIconClicked (e,item);
           });
         } else {
           console.log ("Internal error: no group found for selected toggle button");
         }
-
       } else {
         this.props.handleIconClicked (e,item);
       }
