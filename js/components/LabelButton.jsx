@@ -8,7 +8,7 @@ import '../../css/toolbar.css';
 /**
  *
  */
-export class ToolButton extends React.Component {
+export class LabelButton extends React.Component {
 
   /**
    *
@@ -64,31 +64,12 @@ export class ToolButton extends React.Component {
       buttonClass="toolicon hoverable tool-enabled";
     }
 
-    let face=<img src={this.props.image} className="icon" />;
-
-    if (inverted==true) {
-      face=<img src={this.props.image} className="icon iconinverted" />;
-    }
-
-    if (this.props.icon) {
-      face=<i className="material-icons" style={{margin: "1px"}}>{this.props.icon}</i>
-
-      if (inverted==true) {
-        face=<i className="material-icons iconinverted" style={{margin: "1px"}}>{this.props.icon}</i>
-      }
-    }
-
     if (this.props.label) {
-      let character = this.props.label;
-      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}><div className="texticon">{character.toUpperCase()}</div></div>)
+      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{this.props.label}</div>)
     }    
-
-    if ((this.props.image) || (this.props.icon)) {
-      return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{face}</div>)
-    }
 
     return (<div className={buttonClass} role="button" aria-pressed="false" onClick={(e) => this.handleIconClicked(anId)} alt={this.props.title} title={this.props.title}>{this.props.children}</div>);
   }
 }
 
-export default ToolButton;
+export default LabelButton;
