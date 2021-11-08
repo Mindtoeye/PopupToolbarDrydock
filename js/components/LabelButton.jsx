@@ -49,7 +49,7 @@ export class LabelButton extends React.Component {
    */
   render () {
   	let anId=this.props.buttonid;
-    let buttonClass="toolicon";
+    let buttonClass="toollabel";
     let inverted=false;
 
     if (this.props.inverted) {
@@ -59,9 +59,9 @@ export class LabelButton extends React.Component {
     }    
 
     if (this.state.enabled==false) {
-      buttonClass="toolicon tool-disabled";
+      buttonClass="toollabel tool-disabled";
     } else {
-      buttonClass="toolicon hoverable tool-enabled";
+      buttonClass="toollabel tool-enabled";
     }
 
     if (this.props.label) {
