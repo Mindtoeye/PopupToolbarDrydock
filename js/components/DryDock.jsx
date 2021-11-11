@@ -5,7 +5,7 @@ import ToolBar from './ToolBar';
 
 import '../../css/main.css';
 
-import { menu } from './menu';
+import { menu } from './testsets/menu-labels';
 
 /**
  * 

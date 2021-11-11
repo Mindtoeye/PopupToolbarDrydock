@@ -76,6 +76,25 @@
   box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.28);  
 }
 
+.toollabel {
+  margin: 0px;
+  padding: 0px;
+  padding-left: 6px;
+  padding-right: 4px;
+  overflow: hidden;
+  text-align: left;
+  color: white;
+  background: #424040;
+  font-size: 9pt;
+  line-height: 16pt;
+  border: 0px solid #717171;
+}
+
+.toollabel:hover {
+  border: 0px solid #717171;
+  background: #5c5959;
+}
+
 .tooliconfloathoverable:hover {
   padding: 0px;
 
@@ -207,11 +226,11 @@
 }
 
 .toolbarwidth {
-  width: 36px;
+  width: 100px;
 }
 
 .toolbarheight {
-  height: 36px;
+  height: 22px;
 }
 
 .texticon {
@@ -242,4 +261,3 @@
 .toolbarshadow {
   background: repeating-linear-gradient( 45deg, transparent, transparent 10px, #ddd 10px, #ddd 20px );
 }
-

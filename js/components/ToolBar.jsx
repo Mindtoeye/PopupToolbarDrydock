@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 
 import ToolButton from './ToolButton';
 import ToggleToolButton from './ToggleToolButton';
+import LabelButton from './LabelButton';
 
 import DataTools from './utils/datatools';
 import ToolbarTools from './utils/toolbartools';
@@ -172,7 +173,7 @@ export class ToolBar extends React.Component {
     }
 
     if (item.label) {
-      return(<ToggleToolButton 
+      return(<LabelButton 
         inverted={this.props.data.inverted} 
         key={item.uuid} 
         ref={item.uuid} 
